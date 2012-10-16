@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #LEER DATOS PERSONALES
-. datos
+source "datos"
 
 COOKIE_FILE=entel.cookie
 
@@ -22,7 +22,7 @@ curl \
 	> output.json
 
 jsonval() {
-	temp=`cat output.json | sed 's/\\\\\//\//g' | sed 's/[{}]//g' | sed 's/",/\n/g' | sed 's/,"/\n/g' | sed 's/":"*/|/g' | sed 's/^"//g' | grep "$1|"`
+	temp=`cat output.json | sed 's/\\\\\//\//g' | sed 's/[{}]//g' | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | sed 's/,"/\n/g' | sed 's/":"*/|/g' | sed 's/^"//g' | grep "$1|"`
 	echo ${temp##*|}
 }
 
