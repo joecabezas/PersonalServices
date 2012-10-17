@@ -21,6 +21,9 @@ curl \
 	--location "http://mi.entel.cl/personas/portlet/plan/resumenPlanJson.faces" \
 	> output.json
 
+#delete cookie file
+rm $COOKIE_FILE
+
 jsonval() {
 	temp=`cat output.json | sed 's/\\\\\//\//g' | sed 's/[{}]//g' | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | sed 's/,"/\n/g' | sed 's/":"*/|/g' | sed 's/^"//g' | grep "$1|"`
 	echo ${temp##*|}
