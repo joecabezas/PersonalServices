@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #LEER DATOS PERSONALES
-source "datos"
+. "./datos"
 
 COOKIE_FILE=entel.cookie
 
