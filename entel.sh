@@ -14,7 +14,7 @@ COOKIE_FILE=$SERVICE_NAME.cookie
 #LOGIN
 $CURL_BIN \
 	--cookie-jar $COOKIE_FILE \
-	--data "funcion=ingreso&ext=%2526Sistema%253D1011%2526Portal%253DON%2526desdelogin%253D%2526miEPCS%253DNEW%2526MENU%253DSI&Sistema=1011&Portal=ON&desdelogin=SI&buic_rutdv=$RUTDV&miEPCS=NEW&buic=yes&Movil=$MOVIL&Rut=$RUT&PIN=$PIN" \
+	--data "buic_rutdv=$RUTDV&Movil=$MOVIL&Rut=$RUT&PIN=$PIN" \
 	--location "http://www.entelpcs.cl/login/valida_ws.iws?origen=home" \
 	> /dev/null 2>&1
 
@@ -32,8 +32,19 @@ $CURL_BIN \
 #DELETE COOKIE
 rm $COOKIE_FILE
 
-jsonval() {
-	temp=`cat output.json | sed 's/\\\\\//\//g' | sed 's/[{}]//g' | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | sed 's/,"/\n/g' | sed 's/":"*/|/g' | sed 's/^"//g' | grep "$1|"`
+jsonval()
+{
+	temp=`\
+	cat $SERVICE_NAME.output |\
+	sed 's/\\\\\//\//g' |\
+	sed 's/[{}]//g' |\
+	awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' |\
+	sed 's/,"/\n/g' |\
+	sed 's/":"*/|/g' |\
+	sed 's/^"//g' |\
+	grep "$1|"\
+	`
+
 	echo ${temp##*|}
 }
 
