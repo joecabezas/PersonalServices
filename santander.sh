@@ -32,4 +32,6 @@ $CURL_BIN \
 rm $COOKIE_FILE
 
 #OUTPUT
-cat $OUTPUT_FILE | awk '/<td valign="MIDDLE" colspan= "2" class=.td_f.>/,/<\/td>/' | awk '{ for(i=1; i<=NF; i++) if($i ~/^[0-9]+/) {print $i} }'
+cat $OUTPUT_FILE |\
+	awk '/<td valign="MIDDLE" colspan= "2" class=.td_f.>/,/<\/td>/' |\
+	awk '{ for(i=1; i<=NF; i++) if($i ~/^[0-9]+/) {print $i} }'
