@@ -1,11 +1,17 @@
 #!/bin/sh
 
-#LEER DATOS PERSONALES
-. "./datos"
+#SET SERVICE NAME
+SERVICE_NAME="entel"
 
-COOKIE_FILE=entel.cookie
+#READ PERSONAL DATA
+. "./$SERVICE_NAME.data"
+
+#DEFINE cURL BINARY
 CURL_BIN=curl
 
+COOKIE_FILE=$SERVICE_NAME.cookie
+
+#LOGIN
 $CURL_BIN \
 	--cookie-jar $COOKIE_FILE \
 	--data "funcion=ingreso&ext=%2526Sistema%253D1011%2526Portal%253DON%2526desdelogin%253D%2526miEPCS%253DNEW%2526MENU%253DSI&Sistema=1011&Portal=ON&desdelogin=SI&buic_rutdv=$RUTDV&miEPCS=NEW&buic=yes&Movil=$MOVIL&Rut=$RUT&PIN=$PIN" \
@@ -16,13 +22,14 @@ $CURL_BIN \
 #http://mi.entel.cl/personas/portlet/facturacion/resumenFacturacionJson.faces
 #http://mi.entel.cl/personas/portlet/trafico/traficoEnLineaJson.faces
 
+#FETCHING
 $CURL_BIN \
 	--silent \
 	--cookie $COOKIE_FILE \
 	--location "http://mi.entel.cl/personas/portlet/plan/resumenPlanJson.faces" \
-	> output.json
+	> $SERVICE_NAME.output
 
-#delete cookie file
+#DELETE COOKIE
 rm $COOKIE_FILE
 
 jsonval() {
@@ -40,4 +47,5 @@ jsonval() {
 # saldoFormated
 # mercadoCuentaControlada
 
+#OUTPUT
 jsonval saldo
